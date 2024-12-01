@@ -13,5 +13,5 @@ Produces output png files.
 # Task 2
 The class is in scripts/EfasQuery.py
 
-Run main script:
-$python scripts/main_script.py
+Run example:
+$python scripts/example.py

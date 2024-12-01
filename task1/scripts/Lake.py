@@ -20,14 +20,14 @@ class Lake:
 
     @property
     def Vmax(self):
-        '''
+        """
         Returns Vmax.
-        '''
+        """
         return self._Vmax
 
     @property
     def V0(self):
-        '''
+        """
         Returns desired % of Vmax.
-        '''
+        """
         return self.coeff * self.Vmax

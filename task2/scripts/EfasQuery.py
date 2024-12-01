@@ -1,8 +1,10 @@
+import cdsapi
+
 from utils import CheckAllowedOptions
 
+
 class EfasQuery:
-    """Class to generate query dictionaries to the EFAS forecast dataset.
-    """
+    """Class to generate query dictionaries to the EFAS forecast dataset."""
 
     def __init__(
         self,
@@ -184,7 +186,9 @@ class EfasQuery:
 
 
         """
-        self.system_version = system_version if isinstance(system_version, list) else [system_version]
+        self.system_version = (
+            system_version if isinstance(system_version, list) else [system_version]
+        )
         self.originating_centre = originating_centre
         self.product_type = (
             product_type if isinstance(product_type, list) else [product_type]
@@ -192,11 +196,13 @@ class EfasQuery:
         self.variable = variable if isinstance(variable, list) else [variable]
         self.model_levels = model_levels
         self.soil_level = soil_level
-        self.year = year  if isinstance(year, list) else [year]
-        self.month = month  if isinstance(month, list) else [month]
-        self.day = day  if isinstance(day, list) else [day]
-        self.time = time  if isinstance(time, list) else [time]
-        self.leadtime_hour = leadtime_hour  if isinstance(leadtime_hour, list) else [leadtime_hour]
+        self.year = year if isinstance(year, list) else [year]
+        self.month = month if isinstance(month, list) else [month]
+        self.day = day if isinstance(day, list) else [day]
+        self.time = time if isinstance(time, list) else [time]
+        self.leadtime_hour = (
+            leadtime_hour if isinstance(leadtime_hour, list) else [leadtime_hour]
+        )
         self.area = area
         self.data_format = "netcdf"
         self.download_format = download_format
@@ -398,31 +404,28 @@ class EfasQuery:
         CheckAllowedOptions(
             self.year, ["2018", "2019", "2020", "2021", "2022", "2023", "2024"]
         )
-        if self.year==['2018']:
-            CheckAllowedOptions(self.month, ["October",
-                "November",
-                "December"
-            ])
-        if self.year==['2023']:
-            CheckAllowedOptions(self.month, [ "January",
-                "February",
-                "March",
-                "April",
-                "May",
-                "June",
-                "July",
-                "August",
-                "September"
-            ])
-        if self.year==['2024']:
-            CheckAllowedOptions(self.month, ["May",
-                "June",
-                "July",
-                "August",
-                "September",
-                "October"
-            ])
-            #assume the system can handle cases where multiple year/month combinations are given
+        if self.year == ["2018"]:
+            CheckAllowedOptions(self.month, ["October", "November", "December"])
+        if self.year == ["2023"]:
+            CheckAllowedOptions(
+                self.month,
+                [
+                    "January",
+                    "February",
+                    "March",
+                    "April",
+                    "May",
+                    "June",
+                    "July",
+                    "August",
+                    "September",
+                ],
+            )
+        if self.year == ["2024"]:
+            CheckAllowedOptions(
+                self.month, ["May", "June", "July", "August", "September", "October"]
+            )
+            # assume the system can handle cases where multiple year/month combinations are given
 
         # validate month
         CheckAllowedOptions(
@@ -445,40 +448,40 @@ class EfasQuery:
 
         # validate day
         allowed_days = [
-              "01",
-              "02",
-              "03",
-              "04",
-              "05",
-              "06",
-              "07",
-              "08",
-              "09",
-              "10",
-              "11",
-              "12",
-              "13",
-              "14",
-              "15",
-              "16",
-              "17",
-              "18",
-              "19",
-              "20",
-              "21",
-              "22",
-              "23",
-              "24",
-              "25",
-              "26",
-              "27",
-              "28",
-              "29",
-              "30",
-              "31"
-            ]
+            "01",
+            "02",
+            "03",
+            "04",
+            "05",
+            "06",
+            "07",
+            "08",
+            "09",
+            "10",
+            "11",
+            "12",
+            "13",
+            "14",
+            "15",
+            "16",
+            "17",
+            "18",
+            "19",
+            "20",
+            "21",
+            "22",
+            "23",
+            "24",
+            "25",
+            "26",
+            "27",
+            "28",
+            "29",
+            "30",
+            "31",
+        ]
         CheckAllowedOptions(self.day, allowed_days)
-        #assume the system can handle itself which are the possible days in month
+        # assume the system can handle itself which are the possible days in month
 
         # Validate time
         CheckAllowedOptions(self.time, ["00:00", "12:00"])
@@ -565,7 +568,7 @@ class EfasQuery:
         # Validate download_format
         CheckAllowedOptions(self.download_format, ["unarchived", "zip"])
 
-    def generate_query(self):
+    def generateQuery(self):
         """
         Generate a query dictionary based on the initialized parameters.
         """
@@ -593,3 +596,15 @@ class EfasQuery:
             query["download_format"] = self.download_format
 
         return query
+
+    def downloadFile(self, output):
+        """
+        Submits the query and saves the file.
+
+        :param output: output file location
+        """
+        dataset = (
+            "efas-forecast"  # fixed according to instructions; can be made a variable
+        )
+        client = cdsapi.Client()
+        client.retrieve(dataset, self.generateQuery(), output)

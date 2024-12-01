@@ -262,7 +262,7 @@ def main():
     ]
     monthly["Month"] = monthly["Month"].map(dict(enumerate(month_names, start=1)))
 
-    #Create plots
+    # Create plots
     monthlyOperations(monthly, "output/monthlyOperations.png")
     monthlyRevenue(monthly, "output/monthlyRevenue.png")
     operations(data, "output/operations.png")

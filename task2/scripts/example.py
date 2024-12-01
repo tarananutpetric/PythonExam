@@ -1,12 +1,12 @@
-import cdsapi
-
 from EfasQuery import EfasQuery
+
 
 def main():
     """
     ## MAIN PROGRAM ##
 
     Creates a query and submits it to the efas dataset.
+    Saves output file.
     """
 
     query = EfasQuery(
@@ -23,11 +23,10 @@ def main():
         download_format="zip",
     )
 
-    print(query.generate_query())
+    # print(query.generateQuery())
 
-    # dataset = "efas-forecast"
-    # client = cdsapi.Client()
-    # client.retrieve(dataset, query.generate_query()).download()
+    query.downloadFile("example.zip")
+
 
 # -------------------------------
 if __name__ == "__main__":
